@@ -1,4 +1,4 @@
-# 🎮 GameSense API
+# 🎮 GameSense API 1.0v
 
 <div align="center">
 
@@ -67,11 +67,26 @@ python -m uvicorn main:app --host 127.0.0.1 --port 8000
 
 ## 📡 API Endpoints
 
+### Performance Endpoints
 | Endpoint | Method | Description |
 |----------|--------|-------------|
 | `/api/v1/performance/` | GET | Get current system performance stats |
 | `/api/v1/performance/bottleneck` | GET | Detect performance bottleneck |
 | `/api/v1/performance/throttling` | GET | Check thermal throttling status |
+
+### Game Detection Endpoints
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/v1/game/` | GET | Get active game context |
+| `/api/v1/game/adapters` | GET | List all registered game adapters |
+| `/api/v1/game/running` | GET | Get list of running games |
+| `/api/v1/game/{game_id}` | GET | Get specific game context |
+| `/api/v1/game/{game_id}/info` | GET | Get adapter info |
+| `/api/v1/game/{game_id}/running` | GET | Check if specific game is running |
+
+### System Endpoints
+| Endpoint | Method | Description |
+|----------|--------|-------------|
 | `/health` | GET | Health check endpoint |
 
 ### Example Response
@@ -113,19 +128,32 @@ python -m uvicorn main:app --host 127.0.0.1 --port 8000
 
 ```
 gamesense_api/
-├── main.py              # FastAPI entry point
-├── requirements.txt     # Dependencies
+├── main.py                  # FastAPI entry point
+├── requirements.txt         # Dependencies
+├── adapters/                # Game adapter plugins
+│   ├── base.py              # Base adapter class
+│   ├── registry.py          # Adapter discovery & registration
+│   ├── games/
+│   │   ├── cs2.py           # Counter-Strike 2 adapter
+│   │   └── gta5.py          # GTA V adapter
+│   └── strategies/
+│       ├── log_reader.py    # Log file telemetry strategy
+│       └── window_observer.py  # Window title strategy
 ├── models/
-│   └── performance.py   # Pydantic models
+│   ├── game.py              # Game context models
+│   └── performance.py       # Performance metrics models
 ├── core/
-│   └── performance_monitor.py  # PerformanceMonitor service
+│   ├── game_detector.py     # Game process detection
+│   ├── game_service.py      # Game telemetry service
+│   └── performance_monitor.py  # System monitoring service
 ├── api/
 │   └── endpoints/
-│       └── performance.py      # REST endpoints
+│       ├── game.py          # Game API endpoints
+│       └── performance.py   # Performance API endpoints
 ├── app/
-│   └── lifespan.py      # Startup/shutdown lifecycle
+│   └── lifespan.py          # Startup/shutdown lifecycle
 └── docs/
-    └── README.md        # This file
+    └── README.md
 ```
 
 ---
@@ -138,6 +166,7 @@ gamesense_api/
 - **Graceful Degradation** - Returns sane defaults on hardware failures
 - **Structured Logging** - JSON-formatted logs with component tags
 - **Dependency Injection** - Clean, testable architecture
+- **Extensible Adapter System** - Easy to add new game adapters
 
 ---
 
@@ -157,10 +186,10 @@ pywin32>=306
 
 ## 🛣️ Roadmap
 
-- [ ] Game adapter plugins (Steam, Epic Games)
+- [x] Game adapter plugins (CS2, GTA V)
+- [x] Game state awareness
 - [ ] Voice command ingestion
 - [ ] Dynamic overlay control
-- [ ] Game state awareness
 - [ ] Performance optimization recommendations
 
 ---

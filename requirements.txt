@@ -1,0 +1,15 @@
+# GameSense API Dependencies
+# Core Framework
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+pydantic>=2.5.0
+
+# System Monitoring
+psutil>=5.9.0
+
+# GPU Monitoring (NVIDIA)
+pynvml>=11.5.0
+
+# Windows WMI (fallback for AMD/Intel GPU)
+wmi>=1.5.1
+pywin32>=306
